@@ -5,7 +5,7 @@ import CheckoutPayment from "./CheckoutPayment";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const PaymentPage = ({children}) => {
+const PaymentPage = (props) => {
 
   const options = {
     mode: "payment",
@@ -19,7 +19,7 @@ const PaymentPage = ({children}) => {
   return (
     <div>
       <Elements stripe={stripePromise} options={options}>
-        <CheckoutPayment children={children}/>
+        <CheckoutPayment {...props}/>
       </Elements>
     </div>
   )

@@ -1,6 +1,7 @@
 package com.estuamante.shogun.auth.config;
 
 import com.estuamante.shogun.auth.services.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +17,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -44,7 +47,15 @@ public class WebSecurityConfig {
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                         .csrf(AbstractHttpConfigurer::disable)
                         .cors(Customizer.withDefaults())
-                        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                        .exceptionHandling(exception -> exception
+                                // Custom entry point cho API trả về 401 JSON
+                                .defaultAuthenticationEntryPointFor(
+                                        restAuthenticationEntryPoint(),
+                                        new AntPathRequestMatcher("/api/**")
+                                )
+                        // OAuth2 login mặc định redirect cho các path khác
+                );
         return http.build();
     }
 
@@ -72,6 +83,15 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
+    }
+
+    @Bean
+    public AuthenticationEntryPoint restAuthenticationEntryPoint() {
+        return (request, response, authException) -> {
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getOutputStream().println("{ \"error\": \"Unauthorized\" }");
+        };
     }
 
 }

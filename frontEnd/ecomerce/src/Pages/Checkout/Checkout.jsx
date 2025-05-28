@@ -34,6 +34,7 @@ const Checkout = () => {
         })
     },[dispatch])
 
+
   return (
     <div className='flex p-8'>
         <div className='w-[70%] '>
@@ -83,7 +84,7 @@ const Checkout = () => {
                     </div>
                 </div>
             </div>
-            {paymentMethod === 'CARD' && <PaymentPage/>}
+            {paymentMethod === 'CARD' && <PaymentPage userId={userInfo?.id} addressId={userInfo?.addresses?.[0]?.id}/>}
             {paymentMethod !== 'CARD' && <button className='w-[150px] items-center h-[48px] bg-black border rounded-lg mt-4 text-white hover:bg-gray-800' onClick={()=> navigate('/payment')}>Pay Now</button>}
         </div>
         <div className='w-[30%] border rounded-lg border-gray-500 p-4 flex flex-col gap-4'>

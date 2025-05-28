@@ -16,7 +16,7 @@ export const createOrderRequest = (cartItems,userId,addressId)=>{
             quantity: item?.quantity
         })
     });
-    request.orderItemRequests = orderItems;
+    request.orderItemsRequest = orderItems;
     request.totalAmount =  amount?.toFixed(2);
     request.discount = 0;
     request.paymentMethod= "CARD";

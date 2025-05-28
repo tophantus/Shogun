@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -20,11 +21,9 @@ import java.util.UUID;
 @RequestMapping("/api/order")
 public class OrderController {
     private final OrderService orderService;
-    private final PaymentIntentService paymentIntentService;
 
-    public OrderController(OrderService orderService, PaymentIntentService paymentIntentService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.paymentIntentService = paymentIntentService;
     }
 
     @PostMapping
@@ -38,5 +37,11 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
         orderService.deleteOrder(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<UUID>> getAllOrderByUserId(@PathVariable(name = "id") UUID id) {
+        List<UUID> uuids = orderService.getAllOrder(id);
+        return new ResponseEntity<>(uuids, HttpStatus.OK);
     }
 }

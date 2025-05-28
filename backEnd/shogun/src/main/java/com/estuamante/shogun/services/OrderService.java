@@ -86,7 +86,7 @@ public class OrderService {
                 .build();
         if (Objects.equals(orderRequest.getPaymentMethod(), "CARD")) {
             if (user.getStripeCustomerId() == null || user.getStripeCustomerId().isEmpty()) {
-                // Tạo Customer mới trên Stripe
+                // Create new Customer
                 String stripeCustomerId = paymentIntentService.createStripeCustomer(user.getUsername());
                 user.setStripeCustomerId(stripeCustomerId);
                 userDetailsRepository.save(user);
@@ -100,5 +100,9 @@ public class OrderService {
 
     public void deleteOrder(@PathVariable(name = "id") UUID id) {
         orderRepository.deleteById(id);
+    }
+
+    public List<UUID> getAllOrder(UUID id) {
+        return orderRepository.findOrderIdsByUserId(id);
     }
 }
