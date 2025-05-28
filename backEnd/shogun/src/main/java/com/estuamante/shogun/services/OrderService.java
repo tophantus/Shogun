@@ -10,16 +10,15 @@ import com.estuamante.shogun.mappers.OrderMapper;
 import com.estuamante.shogun.repositories.OrderRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+import com.stripe.model.PaymentIntent;
 import com.stripe.param.CustomerCreateParams;
 import org.apache.coyote.BadRequestException;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -104,5 +103,29 @@ public class OrderService {
 
     public List<UUID> getAllOrder(UUID id) {
         return orderRepository.findOrderIdsByUserId(id);
+    }
+
+    public Map<String, String> updatePayment(String paymentIntentId, String status) {
+        try {
+            PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+            if (paymentIntent != null && paymentIntent.getStatus().equals("succeeded")) {
+                String orderId = paymentIntent.getMetadata().get("orderId");
+                Order order = orderRepository.findById(UUID.fromString(orderId))
+                        .orElseThrow(BadRequestException::new);
+                Payment payment = order.getPayment();
+                payment.setPaymentStatus(PaymentStatus.COMPLETED);
+                payment.setPaymentMethod(paymentIntent.getPaymentMethod());
+                order.setPaymentMethod(paymentIntent.getPaymentMethod());
+                order.setPayment(payment);
+                Order savedOrder = orderRepository.save(order);
+                Map<String, String> map = new HashMap<>();
+                map.put("orderId", String.valueOf(savedOrder.getId()));
+                return map;
+            } else {
+                throw new IllegalArgumentException("PaymentIntent not found or missing metadata");
+            }
+        } catch (StripeException | BadRequestException e) {
+            throw new IllegalArgumentException("PaymentIntent not found or missing metadata");
+        }
     }
 }

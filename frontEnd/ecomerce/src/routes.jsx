@@ -13,6 +13,8 @@ import Account from "./Pages/Account/Account";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Checkout from "./Pages/Checkout/Checkout";
 import PaymentPage from "./Pages/Payment/PaymentPage";
+import ConfirmPayment from "./Pages/ConfirmPayment/ConfirmPayment";
+import OrderConfirmed from "./Pages/OrderConfirmed/OrderConfirmed";
 
 export const router = createBrowserRouter([
     {
@@ -47,6 +49,10 @@ export const router = createBrowserRouter([
             {
                 path: "/checkout",
                 element: <ProtectedRoute><Checkout/></ProtectedRoute>
+            },
+            {
+                path: "/order-confirmed",
+                element: <OrderConfirmed/>
             }
         ]
     },
@@ -67,5 +73,9 @@ export const router = createBrowserRouter([
     {
         path: "/oauth2/callback",
         element: <OAuth2LoginCallback/>
+    },
+    {
+        path: "/confirm-payment",
+        element: <ConfirmPayment/>
     }
 ])

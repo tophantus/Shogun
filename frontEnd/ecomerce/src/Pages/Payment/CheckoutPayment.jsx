@@ -43,7 +43,7 @@ const CheckoutPayment = ({userId, addressId}) => {
             
             confirmParams:{
                 payment_method:'pm_card_visa',
-                return_url:'http://localhost:5173/confirmPayment'
+                return_url:'http://localhost:5173/confirm-payment'
             }
         }).then(res=>{
             console.log("Response ",res);

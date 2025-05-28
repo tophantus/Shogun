@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,6 +32,12 @@ public class OrderController {
         OrderResponse orderResponse = orderService.createOrder(orderRequest, principal);
 
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/update-payment")
+    public ResponseEntity<?> updatePaymentStatus(@RequestBody Map<String, String> request) {
+        Map<String, String> response = orderService.updatePayment(request.get("paymentIntent"), request.get("status"));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

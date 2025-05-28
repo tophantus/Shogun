@@ -26,7 +26,7 @@ public class PaymentIntentService {
     public Map<String, String> createPaymentIntent(Order order) throws StripeException {
         User user = order.getUser();
         Map<String, String> metaData = new HashMap<>();
-        metaData.put("order id", order.getId().toString());
+        metaData.put("orderId", order.getId().toString());
         PaymentIntentCreateParams paymentIntentCreateParams = PaymentIntentCreateParams.builder()
                 .setCustomer(user.getStripeCustomerId())
                 .putAllMetadata(metaData)
