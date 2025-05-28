@@ -41,9 +41,8 @@ public class ProductServiceImpl implements ProductService{
         List<Product> products = productRepository.findAll(productSpecification);
 
         if (!products.isEmpty()) {
-            System.out.println("load");
-            products = productRepository.getAllWithResources(products);
-            products = productRepository.getAllWithVariants(products);
+            productRepository.getAllWithResources(products);
+            productRepository.getAllWithVariants(products);
         }
         return productMapper.toDtoList(products);
     }
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     @Transactional(readOnly = true)
-    public ProductDto getProductById(UUID id) {
+    public ProductDto getProductDtoById(UUID id) {
         Product product = productRepository.findByIdWithResources(id);
         if (product != null) {
             productRepository.findByIdWithVariants(id);
@@ -83,8 +82,9 @@ public class ProductServiceImpl implements ProductService{
         return productMapper.toDto(product);
     }
 
+    @Override
     @Transactional(readOnly = true)
-    private Product findProductById(UUID id) {
+    public Product findProductById(UUID id) {
         Product product = productRepository.findByIdWithResources(id);
         if (product != null) {
             product = productRepository.findByIdWithVariants(id);

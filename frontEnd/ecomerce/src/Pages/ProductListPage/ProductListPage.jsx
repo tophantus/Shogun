@@ -9,6 +9,8 @@ import ProductCard from './ProductCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '../../store/features/common'
 import { getAllProducts } from '../../api/fetchProducts'
+import { loadCategories } from '../../store/features/category'
+import { fetchCategories } from '../../api/fetchCategories'
 
 const categories = content?.categories
 
@@ -29,6 +31,25 @@ const ProductListPage = ({categoryType}) => {
   }, [categoryData, categoryType])
 
   useEffect(() => {
+    if (!categoryData || categoryData.length === 0) {
+      console.log("data")
+      dispatch(setLoading(true));
+      fetchCategories()
+        .then(res => {
+          dispatch(loadCategories(res));
+        })
+        .catch(err => {
+          console.error(err);
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+        });
+    }
+  }, [categoryData, dispatch]);
+
+  useEffect(() => {
+    if (!category?.id) return;
+    console.log("cate")
     dispatch(setLoading(true));
     getAllProducts(category?.id).then(res=>{
       setProducts(res)

@@ -1,5 +1,6 @@
 package com.estuamante.shogun.auth.dtos;
 
+import com.estuamante.shogun.dtos.AddressDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class UserDetailsDto {
     private String phoneNumber;
     private String email;
     private List<AuthorityDto> authorities;
+    private List<AddressDto> addresses;
 }

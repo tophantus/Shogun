@@ -7,11 +7,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullApi;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
+
+    @Override
+    @NonNull
+    @EntityGraph(attributePaths = {"category", "categoryType"})
+    List<Product> findAll(Specification<Product> spec);
 
     @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.productResources WHERE p IN :products")
     List<Product> getAllWithResources(@Param("products") List<Product> products);

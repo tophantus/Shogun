@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
     @Query("SELECT DISTINCT c FROM Category c LEFT JOIN FETCH c.categoryTypes")
     List<Category> findAllWithCategoryTypes();

@@ -13,5 +13,7 @@ public interface ProductService {
 
     ProductDto getProductBySlug(String slug);
 
-    ProductDto getProductById(UUID id);
+    ProductDto getProductDtoById(UUID id);
+
+    Product findProductById(UUID id);
 }

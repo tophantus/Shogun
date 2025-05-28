@@ -8,6 +8,11 @@ import AuthenticationWrapper from "./Pages/AuthenticationWrapper";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import OAuth2LoginCallback from "./Pages/OAuth2LoginCallback";
+import Cart from "./Pages/Cart/Cart";
+import Account from "./Pages/Account/Account";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Checkout from "./Pages/Checkout/Checkout";
+import PaymentPage from "./Pages/Payment/PaymentPage";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +35,18 @@ export const router = createBrowserRouter([
                 path: "/product/:slug",
                 loader: loadProductBySlug,
                 element: <ProductDetails />
+            },
+            {
+                path: "/cart-items",
+                element: <Cart/>
+            },
+            {
+                path: "/account-details",
+                element: <ProtectedRoute><Account/></ProtectedRoute>
+            },
+            {
+                path: "/checkout",
+                element: <ProtectedRoute><Checkout/></ProtectedRoute>
             }
         ]
     },

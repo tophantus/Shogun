@@ -1,4 +1,4 @@
-import React,{useEffect, useMemo, useState} from 'react'
+import React,{useCallback, useEffect, useMemo, useState} from 'react'
 import { Link, useLoaderData, useParams } from 'react-router-dom'
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import content from '../../data/content.json'
@@ -15,6 +15,7 @@ import ProductCard from '../ProductListPage/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 import { getAllProducts } from '../../api/fetchProducts';
+import { addItemToCartAction } from '../../store/actions/cartAction';
 //const categories = content?.categories;
 
 const extraSections = [
@@ -39,10 +40,11 @@ const extraSections = [
 const ProductDetails = () => {
   const {product} = useLoaderData();
   const [image, setImage] = useState()
-  
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state?.cartState?.cart);
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [error, setError] = useState("");
 
   const categories = useSelector((state) => state?.categoryState?.categories);
 
@@ -82,6 +84,35 @@ const ProductDetails = () => {
 
     return links;
   }, [product]);
+
+  const addItemsToCart = useCallback(() => {
+    console.log("selectedSize: ", selectedSize);
+    if (!selectedSize) {
+      setError("Please select size!");
+    } else {
+      const selectedVariant = product?.productVariants?.filter((variant) => variant?.size === selectedSize)?.[0];
+      console.log("selectedVariant: ", selectedVariant);
+      if (selectedVariant?.stockQuantity > 0) {
+        dispatch(addItemToCartAction({
+          productId: product?.id,
+          name: product?.name,
+          thumbnail: product?.thumbnail,
+          quantity: 1,
+          variant: selectedVariant,
+          price: product?.price,
+          subTotal: product?.price
+        }))
+      } else {
+        setError("Out of Stock!")
+      }
+    }
+  }, [selectedSize, dispatch, product])
+
+  useEffect(() => {
+    if (selectedSize) {
+      setError("");
+    }
+  }, [selectedSize])
 
   const colors = useMemo(()=>{
       const colorSet = _.uniq(_.map(product?.productVariants,'color'));
@@ -134,14 +165,19 @@ const ProductDetails = () => {
             <Link className='text-sm text-gray-500 hover:text-gray-900' to={'https://cdn.shopify.com/s/files/1/0373/1190/5851/files/WOMEN-WEBSITE-SIZE-CHARTai-copy_2048x2048.png?v=1595500410'}>{"Size guide ->"}</Link>
           </div>
         </div>
-        <SizeFilter sizes={sizes} hiddenTitle={true}/>
+        <SizeFilter sizes={sizes} hiddenTitle={true} multi={false} onChange={(values) => {setSelectedSize(values?.[0] ?? '')}}/>
         <div>
           <p className='text-lg bold'>Colors available</p>
           <ProductColors colors={colors} />
         </div>
         <div className='flex pt-4'>
-          <button className='bg-black rounded-lg w-[155px] p-2'><div className='flex items-center rounded-lg bg-black text-white'><CartIcon bgColor={'black'}/>Add to cart</div></button>
+          <button className='bg-black rounded-lg w-[155px] p-2' onClick={addItemsToCart}>
+            <div className='flex items-center rounded-lg bg-black text-white'><CartIcon bgColor={'black'}/>
+              Add to cart
+            </div>
+          </button>
         </div>
+        {error && <p className='text-lg text-red-600'>{error}</p>}
         <div className='grid grid-cols-2 pt-4 gap-4'>
           {
             extraSections?.map((section) => (

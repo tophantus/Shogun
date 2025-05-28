@@ -1,0 +1,5 @@
+package com.estuamante.shogun.entities;
+
+public enum OrderStatus {
+    PENDING, SHIPPED, DELIVERED, CANCELLED
+}

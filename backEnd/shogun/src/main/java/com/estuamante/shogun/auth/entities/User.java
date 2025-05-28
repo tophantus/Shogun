@@ -1,11 +1,9 @@
 package com.estuamante.shogun.auth.entities;
 
+import com.estuamante.shogun.entities.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -57,6 +55,12 @@ public class User implements UserDetails {
 
     private boolean enabled=false;
 
+    private String stripeCustomerId;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Address> addresses;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -70,5 +74,9 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return this.email;
+    }
+
+    public List<Authority> getAuthorityList() {
+        return this.authorities;
     }
 }
