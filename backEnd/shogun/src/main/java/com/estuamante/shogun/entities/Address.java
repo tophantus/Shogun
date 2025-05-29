@@ -18,6 +18,8 @@ public class Address {
     @GeneratedValue
     private UUID id;
 
+    private String name;
+
     @Column(nullable = false)
     private String street;
 

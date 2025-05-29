@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setLoading } from '../../store/features/common';
 import { useSelector } from 'react-redux';
 import Spinner from '../../components/Spinner/Spinner';
+import { clearCart } from '../../store/actions/cartAction';
 
 const ConfirmPayment = () => {
     const location = useLocation();
@@ -23,6 +24,7 @@ const ConfirmPayment = () => {
 
         if (redirectStatus === "succeeded") {
             dispatch(setLoading(true));
+            dispatch(clearCart());
             confirmPaymentApi({
                 paymentIntent: paymentIntent,
                 status: paymentIntent

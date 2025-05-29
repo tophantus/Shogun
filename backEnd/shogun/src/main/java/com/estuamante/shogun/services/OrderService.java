@@ -97,7 +97,7 @@ public class OrderService {
     }
 
 
-    public void deleteOrder(@PathVariable(name = "id") UUID id) {
+    public void deleteOrder(UUID id) {
         orderRepository.deleteById(id);
     }
 

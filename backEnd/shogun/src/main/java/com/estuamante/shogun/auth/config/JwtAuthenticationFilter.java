@@ -37,13 +37,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
+        String method = request.getMethod();
 
         // BỎ QUA JWT với các endpoint trong WHITELIST
-        if (WHITELIST.stream().anyMatch(whitelisted -> pathMatcher.match(whitelisted, path))) {
-            System.out.println("math");
+        if (WHITELIST_ALL.stream().anyMatch(p -> pathMatcher.match(p, path)) ||
+                        ("GET".equals(method) && WHITELIST_GET.stream().anyMatch(p -> pathMatcher.match(p, path)))
+        ) {
             filterChain.doFilter(request, response);
             return;
         }
+
         System.out.println("not match");
 
         String authHeader = request.getHeader("Authorization");
@@ -67,8 +70,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                         userDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    } else {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
+                        return;
                     }
+                } else {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
+                    return;
                 }
+            } else {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
+                return;
             }
             filterChain.doFilter(request, response);
         } catch (Exception e) {
@@ -77,14 +89,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     }
 
-    private static final List<String> WHITELIST = List.of(
+    private static final List<String> WHITELIST_GET = List.of(
+            "/api/products",
+            "/api/categories"
+    );
+
+    private static final List<String> WHITELIST_ALL = List.of(
             "/api/auth/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger.html",
-            "/oauth2/success",
-            "/api/products",
-            "/api/categories"
+            "/oauth2/success"
     );
 
 }

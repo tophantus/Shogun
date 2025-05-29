@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -23,5 +24,11 @@ public class AddressController {
     public ResponseEntity<Address> createAddress(@RequestBody AddressRequest addressRequest, Principal principal) {
         Address address = addressService.createAddress(addressRequest, principal);
         return new ResponseEntity<>(address, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable(name = "id") UUID id) {
+        addressService.removeAddress(id);
+        return ResponseEntity.noContent().build();
     }
 }
