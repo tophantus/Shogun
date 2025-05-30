@@ -16,4 +16,6 @@ public interface ProductService {
     ProductDto getProductDtoById(UUID id);
 
     Product findProductById(UUID id);
+
+    public void fetchAllDetailsForProducts(List<Product> products);
 }

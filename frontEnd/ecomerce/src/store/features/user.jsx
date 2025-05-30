@@ -16,13 +16,13 @@ export const userSlice = createSlice({
             }
         },
         saveAddress : (state,action)=>{
-            const addresses = [...state?.userInfo?.addressList] ?? [];
+            const addresses = [...state?.userInfo?.addresses] ?? [];
             addresses.push(action?.payload);
             return {
                 ...state,
                 userInfo:{
                     ...state?.userInfo,
-                    addressList:addresses
+                    addresses:addresses
                 }
             }
         },
@@ -31,7 +31,7 @@ export const userSlice = createSlice({
                 ...state,
                 userInfo:{
                     ...state?.userInfo,
-                    addressList: state?.userInfo?.addressList?.filter(address=> address?.id !== action?.payload)
+                    addresses: state?.userInfo?.addressList?.filter(address=> address?.id !== action?.payload)
                 }
             }
         },

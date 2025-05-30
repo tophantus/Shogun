@@ -3,11 +3,13 @@ package com.estuamante.shogun.services;
 import com.estuamante.shogun.auth.entities.User;
 import com.estuamante.shogun.auth.repositories.UserDetailsRepository;
 import com.estuamante.shogun.auth.services.CustomUserDetailsService;
+import com.estuamante.shogun.dtos.OrderDetails;
 import com.estuamante.shogun.dtos.OrderRequest;
 import com.estuamante.shogun.dtos.OrderResponse;
 import com.estuamante.shogun.entities.*;
 import com.estuamante.shogun.mappers.OrderMapper;
 import com.estuamante.shogun.repositories.OrderRepository;
+import com.estuamante.shogun.repositories.ProductRepository;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
@@ -15,10 +17,12 @@ import com.stripe.param.CustomerCreateParams;
 import org.apache.coyote.BadRequestException;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -127,5 +131,20 @@ public class OrderService {
         } catch (StripeException | BadRequestException e) {
             throw new IllegalArgumentException("PaymentIntent not found or missing metadata");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderDetails> getOrderByUser(String name) {
+        User user = (User) userDetailsService.loadUserByUsername(name);
+        List<Order> orders = orderRepository.findAllWithOrderItemsAndProductsByUser(user);
+        List<Product> products = orders.stream()
+                .flatMap(o -> o.getOrderItems().stream())
+                .map(OrderItem::getProduct)
+                .distinct()
+                .toList();
+
+        productService.fetchAllDetailsForProducts(products);
+
+        return orderMapper.entityListToDetailsList(orders);
     }
 }

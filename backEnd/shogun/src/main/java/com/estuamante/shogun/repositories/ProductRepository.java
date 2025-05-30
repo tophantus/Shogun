@@ -40,5 +40,17 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.productVariants WHERE p.slug = :slug")
     Product findBySlugWithVariants(@Param("slug") String slug);
 
+    @Query("""
+        SELECT DISTINCT p FROM Product p
+        LEFT JOIN FETCH p.productVariants
+        WHERE p IN :products
+    """)
+    List<Product> fetchProductVariantsForProducts(@Param("products") List<Product> products);
 
+    @Query("""
+        SELECT DISTINCT p FROM Product p
+        LEFT JOIN FETCH p.productResources
+        WHERE p IN :products
+    """)
+    List<Product> fetchProductResourcesForProducts(@Param("products") List<Product> products);
 }

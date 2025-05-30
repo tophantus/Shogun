@@ -1,5 +1,6 @@
 package com.estuamante.shogun.controllers;
 
+import com.estuamante.shogun.dtos.OrderDetails;
 import com.estuamante.shogun.dtos.OrderDto;
 import com.estuamante.shogun.dtos.OrderRequest;
 import com.estuamante.shogun.dtos.OrderResponse;
@@ -38,6 +39,12 @@ public class OrderController {
     public ResponseEntity<?> updatePaymentStatus(@RequestBody Map<String, String> request) {
         Map<String, String> response = orderService.updatePayment(request.get("paymentIntent"), request.get("status"));
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<OrderDetails>> getOrderByUser(Principal principal) {
+        List<OrderDetails> orderDetails = orderService.getOrderByUser(principal.getName());
+        return new ResponseEntity<>(orderDetails, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

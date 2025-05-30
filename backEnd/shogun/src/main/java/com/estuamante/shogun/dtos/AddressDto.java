@@ -13,6 +13,7 @@ import java.util.UUID;
 @Builder
 public class AddressDto {
     private UUID id;
+    private String name;
     private String street;
     private String city;
     private String state;

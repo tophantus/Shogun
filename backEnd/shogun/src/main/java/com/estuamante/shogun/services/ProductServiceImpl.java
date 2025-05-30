@@ -93,6 +93,23 @@ public class ProductServiceImpl implements ProductService{
         }
         return product;
     }
+    //
+
+    public List<Product> fetchProductVariantsForProducts(List<Product> products) {
+        return productRepository.fetchProductVariantsForProducts(products);
+    }
+
+    //
+    public List<Product> fetchProductResourcesForProducts(List<Product> products) {
+        return productRepository.fetchProductResourcesForProducts(products);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public void fetchAllDetailsForProducts(List<Product> products) {
+        fetchProductVariantsForProducts(products);
+        fetchProductResourcesForProducts(products);
+    }
 
     @Transactional
     public Product updateProductFromDto(UUID id, ProductDto productDto) {

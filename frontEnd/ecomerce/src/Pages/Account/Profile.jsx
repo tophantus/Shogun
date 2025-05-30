@@ -1,14 +1,26 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectUserInfo } from '../../store/features/user'
+import { removeAddress, selectUserInfo } from '../../store/features/user'
 import { useDispatch } from 'react-redux';
 import AddAddress from './AddAddress';
+import { setLoading } from '../../store/features/common';
+import { deleteAddressApi } from '../../api/userInfo';
 
 const Profile = () => {
     const userInfo = useSelector(selectUserInfo);
     const [addAddress, setAddAddress] = useState(false);
     const dispatch = useDispatch();
 
+    const onDeleteAddress = useCallback((id) => {
+        dispatch(setLoading(true));
+        deleteAddressApi(id).then(res => {
+            dispatch(removeAddress(res));
+        }).catch(err => {
+
+        }).finally(() => {
+            dispatch(setLoading(false));
+        })
+    }, [dispatch])
 
   return (
     <div>
@@ -38,7 +50,7 @@ const Profile = () => {
                             userInfo?.addresses?.map((address, index) => {
                                 return (
                                     <div key={address?.id} className='bg-gray-200 border rounded-lg p-4'>
-                                        <p className='pn-2 font-bold'>{address?.city}</p>
+                                        <p className='pn-2 font-bold'>{address?.name}</p>
                                         <p className="pb-2">{address?.phoneNumber}</p>
                                         <p className="pb-2">
                                             {address?.street},{address?.city},{address?.state}
@@ -46,8 +58,8 @@ const Profile = () => {
                                         <p>{address?.zipCode}</p>
                                         <div className='flex gap-2'>
                                             <button className="underline text-blue-900">Edit</button>
-                                            <button className="underline text-blue-900">
-                                            Remove
+                                            <button onClick={() => onDeleteAddress(address?.id)} className="underline text-blue-900">
+                                                Remove
                                             </button>
                                         </div>
                                     </div>

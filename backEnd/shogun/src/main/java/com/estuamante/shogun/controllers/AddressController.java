@@ -26,7 +26,7 @@ public class AddressController {
         return new ResponseEntity<>(address, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAddress(@PathVariable(name = "id") UUID id) {
         addressService.removeAddress(id);
         return ResponseEntity.noContent().build();
