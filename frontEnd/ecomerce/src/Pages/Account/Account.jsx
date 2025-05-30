@@ -5,8 +5,9 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { setLoading } from '../../store/features/common';
 import { fetchUserDetails } from '../../api/userInfo';
-import { loadUserInfo, selectUserInfo } from '../../store/features/user';
+import { loadUserInfo, selectIsUserAdmin, selectUserInfo } from '../../store/features/user';
 import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProfileIcon  from '../../components/common/ProfileIcon';
 import OrdersIcon from '../../components/common/OrdersIcon';
 import SettingIcon from '../../components/common/SettingIcon';
@@ -16,6 +17,7 @@ const Account = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
+  const isUserAdmin = useSelector(selectIsUserAdmin)
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -30,6 +32,7 @@ const Account = () => {
 
   return (
     <div className='p-8'>
+      {isUserAdmin && <div className='text-right'><Link to={"/admin"} className="text-lg text-blue-900 underline">Manage Admin</Link></div>}
       {userInfo?.email && <>
         <p className='text-lg font-bold'>Hello {userInfo?.firstName}</p>
         <p>Welcome to your account</p>

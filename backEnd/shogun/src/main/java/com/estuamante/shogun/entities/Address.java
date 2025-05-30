@@ -36,6 +36,9 @@ public class Address {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean deleted = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore

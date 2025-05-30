@@ -120,6 +120,7 @@ public class OrderService {
                 payment.setPaymentStatus(PaymentStatus.COMPLETED);
                 payment.setPaymentMethod(paymentIntent.getPaymentMethod());
                 order.setPaymentMethod(paymentIntent.getPaymentMethod());
+                order.setOrderStatus(OrderStatus.IN_PROGRESS);
                 order.setPayment(payment);
                 Order savedOrder = orderRepository.save(order);
                 Map<String, String> map = new HashMap<>();
@@ -146,5 +147,24 @@ public class OrderService {
         productService.fetchAllDetailsForProducts(products);
 
         return orderMapper.entityListToDetailsList(orders);
+    }
+
+    public void cancelOrder(UUID id, Principal principal) {
+        try {
+            User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+            Order order = orderRepository.findById(id)
+                    .orElseThrow(BadRequestException::new);
+            if (!order.getUser().getId().equals(user.getId())) {
+                throw new RuntimeException("You are not allowed to cancel this order");
+            }
+            if (order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CANCELLED) {
+                throw new RuntimeException("Order cannot be cancelled at this stage");
+            }
+
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            orderRepository.save(order);
+        } catch (BadRequestException e) {
+            throw new RuntimeException("Order not found");
+        }
     }
 }

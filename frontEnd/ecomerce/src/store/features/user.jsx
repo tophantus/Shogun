@@ -31,7 +31,7 @@ export const userSlice = createSlice({
                 ...state,
                 userInfo:{
                     ...state?.userInfo,
-                    addresses: state?.userInfo?.addressList?.filter(address=> address?.id !== action?.payload)
+                    addresses: state?.userInfo?.addresses?.filter(address=> address?.id !== action?.payload)
                 }
             }
         },
@@ -62,5 +62,5 @@ export const { loadUserInfo, saveAddress, removeAddress, loadOrders, cancelOrder
 
 export const selectUserInfo = (state) => state?.userState?.userInfo ?? {};
 export const selectAllOrders = (state) => state?.userState?.orders ?? [];
-export const selectIsUserAdmin = (state) => state?.userState?.userInfo?.authorityList?.find((authority)=> authority?.roleCode === 'ADMIN')?.authority === 'ADMIN';
+export const selectIsUserAdmin = (state) => state?.userState?.userInfo?.authorities?.some((authority)=> authority?.roleCode === 'ADMIN');
 export default userSlice?.reducer;

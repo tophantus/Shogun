@@ -1,5 +1,5 @@
 package com.estuamante.shogun.entities;
 
 public enum OrderStatus {
-    PENDING, SHIPPED, DELIVERED, CANCELLED
+    PENDING, SHIPPED, IN_PROGRESS, DELIVERED, CANCELLED
 }

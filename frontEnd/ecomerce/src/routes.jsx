@@ -18,6 +18,7 @@ import OrderConfirmed from "./Pages/OrderConfirmed/OrderConfirmed";
 import Profile from "./Pages/Account/Profile";
 import Orders from "./Pages/Account/Orders";
 import Settings from "./Pages/Account/Settings";
+import AdminPanel from "./Pages/AdminPanel/AdminPanel";
 
 export const router = createBrowserRouter([
     {
@@ -94,5 +95,9 @@ export const router = createBrowserRouter([
     {
         path: "/confirm-payment",
         element: <ConfirmPayment/>
+    },
+    {
+        path: "/admin/*",
+        element: <ProtectedRoute><AdminPanel/></ProtectedRoute>
     }
 ])

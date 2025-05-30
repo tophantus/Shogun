@@ -47,6 +47,13 @@ public class OrderController {
         return new ResponseEntity<>(orderDetails, HttpStatus.OK);
     }
 
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelOrder(@PathVariable(name = "id") UUID id, Principal principal) {
+        orderService.cancelOrder(id, principal);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //Test
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
         orderService.deleteOrder(id);

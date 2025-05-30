@@ -14,6 +14,7 @@ import java.util.UUID;
 public class AddressDto {
     private UUID id;
     private String name;
+    private Boolean deleted;
     private String street;
     private String city;
     private String state;

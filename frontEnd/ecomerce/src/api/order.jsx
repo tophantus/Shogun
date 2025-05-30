@@ -50,10 +50,10 @@ export const fetchOrderApi = async ()   => {
 
 
 export const cancelOrderApi = async (id)   => {
-    const url = API_BASE_URL + `/api/order/${id}`;
+    const url = API_BASE_URL + `/api/order/cancel/${id}`;
     try{
         const response = await axios(url,{
-            method:"DELETE",
+            method:"POST",
             headers:getHeaders()
         });
         return response?.data;

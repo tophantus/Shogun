@@ -5,6 +5,8 @@ import { setLoading } from '../../store/features/common';
 import { cancelOrderApi, fetchOrderApi } from '../../api/order';
 import { cancelOrder, loadOrders, selectAllOrders } from '../../store/features/user';
 import moment from 'moment';
+import Timeline from '../../components/Timeline/Timeline';
+import { getStepCount } from '../../utils/order-util';
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -12,6 +14,7 @@ const Orders = () => {
 
   const [orders, setOrders] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("ACTIVE");
+  const [selectedOrder, setSelectedOrder] = useState("");
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -60,7 +63,7 @@ const Orders = () => {
   const onCancelOrder = useCallback((id)=>{
     dispatch(setLoading(true));
     cancelOrderApi(id).then(res=>{
-      dispatch(cancelOrder(res));
+      dispatch(cancelOrder(id));
     }).catch(err=>{
   
     }).finally(()=>{
@@ -99,6 +102,38 @@ const Orders = () => {
                       </div>
                     </div>
                   </div>
+
+                  {selectedOrder === order?.id && 
+                    <div>
+                      {
+                        order?.items?.map((orderItem, index) => {
+                          return (
+                            <div key={index} className='flex gap-4'>
+                              <img src={orderItem?.url} alt={orderItem?.name} className='w-[120px] h-[120px] object-cover m-2 rounded' />
+                              <div className='flex flex-col text-sm py-2 text-gray-600'>
+                                <p>{orderItem?.name || 'Name'}</p>
+                                <p>Quantity {orderItem?.quantity}</p>
+                              </div>
+                            </div>
+                          )
+                        })
+                      }
+                      <div className='flex justify-between'>
+                        <p>Total : ${order?.totalAmount}</p>
+                        <button onClick={()=> setSelectedOrder('')} className='text-blue-900 text-right rounded underline cursor-pointer'>Hide Details</button>
+                      </div>
+                      {
+                        order?.orderStatus !== "CANCELLED" &&
+                        <>
+                          <Timeline stepCount={getStepCount[order?.orderStatus]}/>
+                          {
+                            getStepCount[order?.orderStatus] <= 2 &&
+                            <button onClick={()=> onCancelOrder(order?.id)} className='bg-black h-[42px] w-[120px] text-white rounded-lg mb-2'>Cancel Order</button>
+                          }
+                        </>
+                      }
+                    </div>
+                  }
                 </div>
               )
             })
