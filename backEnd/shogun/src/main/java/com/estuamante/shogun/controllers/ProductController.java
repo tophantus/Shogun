@@ -5,6 +5,7 @@ import com.estuamante.shogun.dtos.ProductDto;
 import com.estuamante.shogun.entities.Product;
 import com.estuamante.shogun.services.ProductService;
 import io.micrometer.common.util.StringUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,8 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getAllProducts(
             @RequestParam(required = false)UUID categoryId,
             @RequestParam(required = false) UUID categoryTypeId,
-            @RequestParam(required = false) String slug
+            @RequestParam(required = false) String slug,
+            HttpServletResponse response
     ) {
         List<ProductDto> productDtos = new ArrayList<>();
         if (StringUtils.isNotBlank(slug)) {
@@ -35,6 +37,7 @@ public class ProductController {
         } else {
             productDtos = productService.getAllProduct(categoryId, categoryTypeId);
         }
+        response.setHeader("Content-Range", String.valueOf(productDtos.size()));
         return new ResponseEntity<>(productDtos, HttpStatus.OK);
     }
 

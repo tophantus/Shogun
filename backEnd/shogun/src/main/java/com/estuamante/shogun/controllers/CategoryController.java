@@ -4,6 +4,7 @@ import com.estuamante.shogun.dtos.CategoryDto;
 import com.estuamante.shogun.entities.Category;
 import com.estuamante.shogun.repositories.CategoryRepository;
 import com.estuamante.shogun.services.CategoryService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
+    public ResponseEntity<List<CategoryDto>> getAllCategories(HttpServletResponse response) {
         List<CategoryDto> categories = categoryService.getAllCategories();
+        response.setHeader("Content-Range", String.valueOf(categories.size()));
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 

@@ -77,8 +77,14 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173")); // React Vite port
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        corsConfiguration.setAllowedHeaders(List.of(
+                "Origin", "Content-Type", "Accept", "responseType",
+                "Authorization", "x-authorization", "content-range", "range"
+        ));
+        corsConfiguration.setExposedHeaders(List.of(
+                "X-Total-Count", "content-range", "Content-Type", "Accept", "X-Requested-With", "remember-me"
+        ));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);

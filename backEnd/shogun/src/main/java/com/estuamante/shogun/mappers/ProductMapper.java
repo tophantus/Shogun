@@ -14,11 +14,15 @@ public interface ProductMapper {
 
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "categoryTypeId", source = "categoryType.id")
-    @Mapping(target = "thumbnail", source = "productResources", qualifiedByName = "extractThumbnail")
+
+    @Mapping(target = "thumbnail", expression = "java(getThumbnail(product))")
     ProductDto toDto(Product product);
 
-    @Named("extractThumbnail")
-    static String extractThumbnail(List<Resources> resources) {
+    default String getThumbnail(Product product) {
+        if (product.getThumbnail() != null && !product.getThumbnail().isEmpty()) {
+            return product.getThumbnail();
+        }
+        List<Resources> resources = product.getProductResources();
         if (resources == null) return null;
         return resources.stream()
                 .filter(Resources::getIsPrimary)
@@ -29,7 +33,7 @@ public interface ProductMapper {
 
     List<Product> toEntityList(List<ProductDto> productDtos);
     List<ProductDto> toDtoList(List<Product> products);
-
+    
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateProductFromDto(ProductDto productDto, @MappingTarget Product product);
 }

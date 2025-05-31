@@ -40,6 +40,8 @@ public class Product {
     @Column
     private Float rating;
 
+    private String thumbnail;
+
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date createdAt;

@@ -24,8 +24,9 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
 
     public CategoryDto getCategory(UUID id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        return categoryMapper.toDto(category.orElse(null));
+        Category category = categoryRepository.findByIdWithCategoryTypes(id)
+                .orElseThrow(() -> new ResourcesNotFoundEx("Category not found with id " + id));
+        return categoryMapper.toDto(category);
     }
 
     public Category createCategory(CategoryDto categoryDto) {
