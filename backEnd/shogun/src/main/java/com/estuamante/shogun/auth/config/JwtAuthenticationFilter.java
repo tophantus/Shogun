@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
             System.out.println("error");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
+            filterChain.doFilter(request, response);
             return;
         }
         try {
@@ -70,18 +70,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                         userDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    } else {
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
-                        return;
                     }
-                } else {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
-                    return;
                 }
-            } else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
-                return;
             }
+            System.out.println("đến dc đây");
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/oauth2/success").permitAll()
                         .anyRequest().authenticated())
                         .oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/oauth2/success"))
-                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .csrf(AbstractHttpConfigurer::disable)
                         .cors(Customizer.withDefaults())
                         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
