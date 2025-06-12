@@ -1,98 +1,104 @@
-# Shogun – Web-based Sales Application
+# 🛒 Shogun – Ứng dụng Bán hàng Trực tuyến
 
+## 🧾 Tổng quan
 
-## Overview
-
-Shogun is a modern, full-stack web-based sales application providing a seamless shopping experience. It features a secure backend built with Spring Boot and a responsive React frontend. Users can browse products, upload product images, authenticate securely, and pay online with Stripe.
-Admins have additional privileges to add, edit, and delete users, while regular users can only browse products, place orders, and complete payments.
-
----
-
-## Features
-
-- RESTful APIs with full CRUD for product management using Spring Boot and Spring Data JPA
-- MySQL database designed with JPA entities for reliable data persistence
-- Responsive and intuitive UI built with React
-- Secure authentication and authorization using Spring Security with JWT tokens
-- Google OAuth 2.0 integration for Gmail login
-- Stripe API integration for secure checkout and payment processing
-- Cloudinary integration for efficient image upload and management
+**Shogun** là một ứng dụng web hiện đại, cung cấp trải nghiệm mua sắm liền mạch. Backend được xây dựng bằng Spring Boot, frontend bằng React.  
+Người dùng có thể duyệt sản phẩm, tải ảnh lên, đăng nhập an toàn và thanh toán online qua Stripe.  
+👑 Quản trị viên có quyền quản lý người dùng, trong khi người dùng thường chỉ có thể duyệt sản phẩm, đặt hàng và thanh toán.
 
 ---
 
-## Technology Stack
+## ✨ Tính năng
 
-| Layer             | Technology & Tools                   |
-|-------------------|------------------------------------|
-| Backend           | Java, Spring Boot, Spring Security, Spring Data JPA, JWT, OAuth 2.0 |
-| Frontend          | React, Axios , React Router, React-admin,|
-| Database          | MySQL                              |
-| Authentication    | JWT, Spring Security, Google OAuth 2.0 |
-| Payment Gateway   | Stripe API                         |
-| Image Storage     | Cloudinary API                     |
+- 🔄 API RESTful hỗ trợ đầy đủ CRUD cho quản lý sản phẩm bằng Spring Boot và Spring Data JPA  
+- 🛢️ Cơ sở dữ liệu MySQL thiết kế với JPA entities để đảm bảo lưu trữ dữ liệu bền vững  
+- 💻 Giao diện trực quan, phản hồi nhanh được xây dựng với React  
+- 🔐 Bảo mật xác thực và phân quyền bằng Spring Security kết hợp JWT  
+- 📧 Đăng nhập bằng tài khoản Gmail thông qua Google OAuth 2.0  
+- 💳 Tích hợp Stripe API để thanh toán trực tuyến an toàn  
+- 🖼️ Tích hợp Cloudinary để tải lên và quản lý ảnh sản phẩm hiệu quả  
 
 ---
 
-## Getting Started
+## 🧰 Công nghệ sử dụng
 
-### Prerequisites
+| 🧩 Thành phần        | 🚀 Công nghệ & Công cụ                                    |
+|----------------------|-----------------------------------------------------------|
+| 🔧 Backend           | Java, Spring Boot, Spring Security, Spring Data JPA, JWT, OAuth 2.0 |
+| 🎨 Frontend          | React, Axios, React Router, React-admin                   |
+| 🛢️ Cơ sở dữ liệu     | MySQL                                                     |
+| 🔐 Xác thực          | JWT, Spring Security, Google OAuth 2.0                    |
+| 💳 Thanh toán        | Stripe API                                                |
+| ☁️ Lưu trữ ảnh       | Cloudinary API                                            |
 
-- Java 17+
-- Maven
-- Node.js & npm
-- MySQL
-- Stripe account
-- Cloudinary account
-- Google Cloud project with OAuth 2.0 credentials
+---
 
-### Backend Setup
+## 🚀 Bắt đầu
 
-1. Clone the repository:
+### ⚙️ Yêu cầu hệ thống
+
+- ☕ Java 17 trở lên  
+- 🔨 Maven  
+- 🟢 Node.js & npm  
+- 🛢️ MySQL  
+- 💳 Tài khoản Stripe  
+- ☁️ Tài khoản Cloudinary  
+- 🔑 Dự án Google Cloud có OAuth 2.0 credentials  
+
+### 🔧 Thiết lập Backend
+
+1. Clone repository:
     ```bash
     git clone https://github.com/tophantus/Shogun.git
     cd Shogun/backend
     ```
-2. Configure environment variables or `application.properties` with your:
-    - MySQL database credentials
-    - JWT secret key
-    - Google OAuth client ID and secret
-    - Stripe API keys
-    - Cloudinary cloud name, API key, and secret
 
-3. Build and run backend server:
+2. Cấu hình các biến môi trường hoặc file `application.properties` với thông tin sau:
+   - 🛢️ Thông tin kết nối cơ sở dữ liệu MySQL  
+   - 🔐 Khóa bí mật JWT  
+   - 🔑 Client ID và Secret của Google OAuth  
+   - 💳 Stripe API Key  
+   - ☁️ Cloud name, API key và API secret của Cloudinary  
+
+3. Build và chạy server backend:
     ```bash
     mvn clean install
     mvn spring-boot:run
     ```
 
-### Frontend Setup
+### 💻 Thiết lập Frontend
 
-1. Navigate to frontend folder:
+1. Di chuyển đến thư mục frontend:
     ```bash
     cd ../frontend
     ```
-2. Install dependencies:
+
+2. Cài đặt dependencies:
     ```bash
     npm install
     ```
-3. Add any required environment variables (such as API base URL) in `.env`
-4. Start the React development server:
+
+3. Thêm các biến môi trường cần thiết (ví dụ: địa chỉ API backend) vào file `.env`
+
+4. Khởi động React development server:
     ```bash
     npm start
     ```
 
 ---
 
-## Usage
+## 🧪 Sử dụng
 
-- Browse and manage products with full CRUD features
-- Upload product images with Cloudinary integration
-- Authenticate securely with email/password or Google OAuth
-- Process payments safely with Stripe checkout
+- 🔍 Tìm kiếm và quản lý sản phẩm với đầy đủ chức năng CRUD  
+- 🖼️ Tải ảnh sản phẩm lên nhờ tích hợp Cloudinary  
+- 🔐 Đăng nhập an toàn bằng email/mật khẩu hoặc qua Google OAuth  
+- 💳 Thanh toán an toàn thông qua Stripe Checkout  
 
 ---
 
-## Project Structure
+## 🗂️ Cấu trúc Dự án
+
+
 
 ```
 Shogun/
@@ -103,6 +109,6 @@ Shogun/
 
 ---
 
-## Contribution
+## 🤝 Đóng góp
 
-This project is an individual work. Feel free to open issues or submit pull requests.
+Dự án này là sản phẩm cá nhân. Bạn có thể thoải mái tạo issue hoặc gửi pull request nếu muốn đóng góp.
